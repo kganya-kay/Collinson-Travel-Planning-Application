@@ -1,7 +1,7 @@
 # AI Usage Disclosure
 
 ## Overview
-This project was developed with GitHub Copilot and Claude assistance for specific tasks. However, all architectural decisions, core logic, and validation were my own independent work.
+This project was developed with the assistance of chatGPT (Codex) and Github copilot for specific tasks. However, all architectural decisions, core logic, and validation were my own independent work.
 
 ## What AI Assisted With
 
@@ -31,7 +31,7 @@ This project was developed with GitHub Copilot and Claude assistance for specifi
 
 ### 1. **Architecture Design** ✅
 - Designed layered architecture (Clients → Services → Resolvers → GraphQL)
-- Decided on dependency injection pattern for testability
+- Decided on dependency injection pattern for testability and allows us to use mock responses
 - Chose coordinate-based city addressing (not database IDs)
 - Designed error handling hierarchy
 
@@ -90,7 +90,6 @@ This project was developed with GitHub Copilot and Claude assistance for specifi
 ### 6. **Code Comments & Documentation** ✅
 - Wrote all technical comments explaining *why* decisions were made
 - Added architecture documentation
-- Documented design rationales vs. just *what* the code does
 - Explained tradeoffs in comments
 
 ### 7. **Integration & Validation** ✅
@@ -158,7 +157,7 @@ This project was developed with GitHub Copilot and Claude assistance for specifi
 | Tool | Purpose | How It Helped | My Judgment |
 |------|---------|---------------|-------------|
 | GitHub Copilot | Code autocomplete | Suggested signatures and patterns | Evaluated and customized |
-| Claude | Architecture discussion | Helped explain patterns | Validated against requirements |
+| ChatGPT | Architecture discussion | Helped explain patterns | Validated against requirements |
 | TypeScript | Type safety | Provided static analysis | Enabled strict mode |
 
 ---
@@ -198,6 +197,7 @@ This project was developed with GitHub Copilot and Claude assistance for specifi
 - Configuration files
 - Boilerplate code patterns
 - GraphQL schema structure
+- compiling readme.md file from my notes
 
 🎯 **My Independent Contributions**:
 - All architecture decisions
@@ -205,36 +205,7 @@ This project was developed with GitHub Copilot and Claude assistance for specifi
 - All error handling strategy
 - All test design and assertions
 - All documentation and comments
-
----
-
-## If Asked in Interview
-
-**"How much did you rely on AI?"**
-
-> "I used AI for initial scaffolding and understanding patterns, but all architectural decisions, business logic, and validation were my own work. The activity ranking algorithm, error handling strategy, and testing approach were completely independent decisions. I validated all AI suggestions against requirements and customized or rejected them when needed."
-
-**"Can you explain the activity ranking without looking at code?"**
-
-> [Yes - this proves you own it, not AI]
-
-**"Why did you choose coordinates instead of a database?"**
-
-> "It's a conscious MVP tradeoff. Simpler for demo, but documented that production would use proper DB IDs. AI suggested full database setup, but I evaluated it against requirements and chose simpler approach."
-
-**"Can you walk through a test you wrote?"**
-
-> [Yes - all tests are mine, showing understand of what's being tested and why]
-
 ---
 
 ## Conclusion
-
-This project demonstrates:
-1. **Judgment**: Evaluated AI suggestions critically
-2. **Understanding**: Core logic is mine, not copied
-3. **Independence**: Architecture and decisions are original
-4. **Validation**: Comprehensive testing proves correctness
-5. **Honesty**: Transparent about what AI assisted with
-
 The codebase reflects thoughtful engineering decisions, not blindly applied AI output.
