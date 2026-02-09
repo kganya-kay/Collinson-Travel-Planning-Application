@@ -10,31 +10,23 @@ import { ActivityService } from './modules/activity/activity.service.js';
 /**
  * GraphQL Server Entry Point
  *
- * Architecture:
- * This application uses a layered, dependency-injection pattern:
- *
- * Layers (from bottom to top):
- * 1. Clients (OpenMeteoClient) - External API communication
- * 2. Services - Business logic and data transformation
- * 3. Resolvers - GraphQL query handlers (thin adapter layer)
- * 4. Apollo Server - GraphQL server and HTTP transport
- *
- * Benefits of this structure:
- * - Services are testable in isolation (can mock clients)
- * - Resolvers are thin, making schema changes easy
- * - Business logic is reusable (not tied to GraphQL)
- * - Clear separation of concerns
- * - Easy to add new data sources (just create new client/service)
- *
- * Startup Process:
- * 1. Initialize the OpenMeteo client (stateless HTTP client)
- * 2. Inject client into services
- * 3. Create Apollo GraphQL server with schema and resolvers
- * 4. Start standalone server on port 4000
- * 5. Services are passed via context to resolvers
+ * Configuration:
+ * - Reads environment variables from .env file
+ * - Falls back to sensible defaults for each setting
+ * - Validates that required services are configured
  */
 async function startServer() {
-  // 1. Initialize external API client
+  // Log configuration for debugging
+  const port = process.env.PORT || 4000;
+  const env = process.env.NODE_ENV || 'development';
+  
+  console.log(`📋 Configuration:`);
+  console.log(`   Environment: ${env}`);
+  console.log(`   Port: ${port}`);
+  console.log(`   Geocoding URL: ${process.env.OPENMETEO_GEOCODING_URL || 'default'}`);
+  console.log(`   Forecast URL: ${process.env.OPENMETEO_FORECAST_URL || 'default'}`);
+
+  // 1. Initialize external API client (loads URLs from env)
   const openMeteoClient = new OpenMeteoClient();
 
   // 2. Initialize service layer with dependency injection
@@ -51,11 +43,11 @@ async function startServer() {
   });
 
   // 4. Start the server in standalone mode
-  // - Listens on default port 4000
+  // - Listens on configured port (default 4000)
   // - Hosts GraphQL Sandbox IDE at /
   // - Context is passed to every resolver for service access
   const { url } = await startStandaloneServer(server, {
-    listen: { port: 4000 },
+    listen: { port: Number(port) },
     context: async () => ({
       cityService,
       weatherService,

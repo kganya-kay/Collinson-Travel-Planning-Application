@@ -27,8 +27,14 @@ import type { ForecastData } from '../modules/weather/weather.types.js';
  * - Open data policy
  */
 export class OpenMeteoClient {
-  private geocodingUrl = 'https://geocoding-api.open-meteo.com';
-  private forecastUrl = 'https://api.open-meteo.com';
+  private geocodingUrl: string;
+  private forecastUrl: string;
+
+  constructor() {
+    // Load URLs from environment variables with fallback to public endpoints
+    this.geocodingUrl = process.env.OPENMETEO_GEOCODING_URL || 'https://geocoding-api.open-meteo.com';
+    this.forecastUrl = process.env.OPENMETEO_FORECAST_URL || 'https://api.open-meteo.com';
+  }
 
   /**
    * Search for cities by name using OpenMeteo Geocoding API.
