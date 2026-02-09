@@ -375,8 +375,4 @@ Test coverage:
 3. **Isolated**: Each layer tested independently
 4. **Clear Intent**: Tests document expected behavior
 
-## License
-
-MIT
-
 ---
