@@ -1,5 +1,5 @@
 import { OpenMeteoClient } from '../../clients/openmeteo.client.js';
-import { CityNotFoundError } from '../../utils/errors.js';
+import { CityNotFoundError, InvalidCityIdError } from '../../utils/errors.js';
 import type { City, CitySearchResult } from './city.types.js';
 
 /**
@@ -38,6 +38,31 @@ export class CityService {
     }
 
     return results.map((result) => this.transformResult(result));
+  }
+
+  /**
+   * Get a single city by ID. For this app we accept a coordinate-based ID
+   * in the format "latitude:longitude" and perform reverse geocoding.
+   */
+  async getCityById(cityId: string): Promise<City> {
+    const parts = cityId.split(':');
+    if (parts.length !== 2) {
+      throw new InvalidCityIdError(cityId);
+    }
+
+    const latitude = parseFloat(parts[0]!);
+    const longitude = parseFloat(parts[1]!);
+
+    if (isNaN(latitude) || isNaN(longitude)) {
+      throw new InvalidCityIdError(cityId);
+    }
+
+    const result = await this.client.searchCityByCoordinates(latitude, longitude);
+    if (!result) {
+      throw new CityNotFoundError(cityId);
+    }
+
+    return this.transformResult(result);
   }
 
   /**

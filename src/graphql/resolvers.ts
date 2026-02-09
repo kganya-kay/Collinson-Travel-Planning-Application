@@ -62,20 +62,23 @@ export const resolvers = {
     forecast: async (
       _: unknown,
       { cityId }: { cityId: string },
-      { weatherService }: ResolverContext
+      { cityService, weatherService }: ResolverContext
     ) => {
       const { latitude, longitude } = parseCoordinates(cityId);
 
       try {
         const daily = await weatherService.getForecast(latitude, longitude);
 
+        // Attempt to resolve city name from coordinates
+        const cityData = await cityService.getCityById(cityId);
+
         return {
           city: {
             id: cityId,
-            name: `${latitude.toFixed(2)}°, ${longitude.toFixed(2)}°`,
-            country: 'Unknown',
-            latitude,
-            longitude
+            name: cityData.name,
+            country: cityData.country,
+            latitude: cityData.latitude,
+            longitude: cityData.longitude
           },
           daily
         };
@@ -102,20 +105,22 @@ export const resolvers = {
     activityRanking: async (
       _: unknown,
       { cityId }: { cityId: string },
-      { activityService }: ResolverContext
+      { cityService, activityService }: ResolverContext
     ) => {
       const { latitude, longitude } = parseCoordinates(cityId);
 
       try {
         const { scores, recommended } = await activityService.rankActivitiesForCity(latitude, longitude);
 
+        const cityData = await cityService.getCityById(cityId);
+
         return {
           city: {
             id: cityId,
-            name: `${latitude.toFixed(2)}°, ${longitude.toFixed(2)}°`,
-            country: 'Unknown',
-            latitude,
-            longitude
+            name: cityData.name,
+            country: cityData.country,
+            latitude: cityData.latitude,
+            longitude: cityData.longitude
           },
           scores,
           recommended

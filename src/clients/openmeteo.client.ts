@@ -75,13 +75,26 @@ export class OpenMeteoClient {
    * Future Implementation:
    * Could use a different API or cache cities from previous searches.
    */
-  async searchCitiesByCoordinates(cityId: string): Promise<CitySearchResult | null> {
+  /**
+   * Reverse geocoding: get nearest city info for given coordinates.
+   * Uses OpenMeteo's reverse geocoding endpoint.
+   */
+  async searchCityByCoordinates(latitude: number, longitude: number): Promise<CitySearchResult | null> {
     try {
-      // Placeholder for reverse geocoding
-      // In a real app, could integrate a reverse geocoding service
-      return null;
+      const response = await axios.get(`${this.geocodingUrl}/v1/reverse`, {
+        params: {
+          latitude,
+          longitude,
+          count: 1,
+          language: 'en',
+          format: 'json'
+        }
+      });
+
+      const results: CitySearchResult[] = response.data.results || [];
+      return results.length > 0 ? results[0] : null;
     } catch (error) {
-      throw new Error(`Failed to get city info: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new Error(`Failed to reverse geocode coordinates: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }
 
