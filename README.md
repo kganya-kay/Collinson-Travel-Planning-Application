@@ -380,7 +380,3 @@ Test coverage:
 MIT
 
 ---
-
-## Questions or Feedback?
-
-For architecture explanations, see [INTERVIEW_PREP.md](./INTERVIEW_PREP.md) which documents design decisions and potential interview questions.
