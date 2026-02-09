@@ -93,7 +93,13 @@ export class OpenMeteoClient {
 
       const results: CitySearchResult[] = response.data.results || [];
       return results.length > 0 ? results[0] : null;
-    } catch (error) {
+    } catch (error: any) {
+      // If the reverse endpoint returns 404 (no nearby place), return null so
+      // callers can gracefully fallback to coordinate-only city info.
+      if (axios.isAxiosError(error) && error.response?.status === 404) {
+        return null;
+      }
+
       throw new Error(`Failed to reverse geocode coordinates: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }

@@ -57,9 +57,24 @@ export class CityService {
       throw new InvalidCityIdError(cityId);
     }
 
-    const result = await this.client.searchCityByCoordinates(latitude, longitude);
+    // Try reverse geocoding; if it fails (e.g. 404) we fallback to a
+    // coordinate-based city representation so downstream calls (forecast,
+    // activityRanking) can still succeed.
+    let result: CitySearchResult | null = null;
+    try {
+      result = await this.client.searchCityByCoordinates(latitude, longitude);
+    } catch (err) {
+      // Do not rethrow; we'll fall back below.
+    }
+
     if (!result) {
-      throw new CityNotFoundError(cityId);
+      return {
+        id: cityId,
+        name: `${latitude.toFixed(4)}, ${longitude.toFixed(4)}`,
+        country: '',
+        latitude,
+        longitude
+      };
     }
 
     return this.transformResult(result);
